@@ -5,13 +5,11 @@ const GameBoard = () => {
     const [squares, setSquares] = React.useState(Array(9).fill(null));
     const [isX, setisX] = React.useState(true);
     const [isWinner, setIsWinner] = React.useState(false);
-    //var isWinner = false;
     const handleClick = (i) => {
         squares[i] = isX ? 'X' : 'O';
         setSquares(squares);
         let win = calculateWinner(squares);
         let winner = win.length ? true : false;
-        console.log("Winner ---> ", isWinner);
         setIsWinner(winner);
         setisX(!isX);
     }
@@ -20,6 +18,10 @@ const GameBoard = () => {
         setisX(true);
         setSquares(Array(9).fill(null));
         setIsWinner(false);
+    }
+
+    const renderSquare = (index) => {
+        return <Square value={squares[index]} onClick={() => (squares[index] === null && !isWinner) ? handleClick(index) : false}/>
     }
         return (
             <div className="game-board">
@@ -32,19 +34,19 @@ const GameBoard = () => {
                 ) : null }
                 
                 <div className="board-row">
-                    <Square className="" value={squares[0]} onClick={() => (squares[0] === null && !isWinner) ? handleClick(0) : false}/>
-                    <Square className="" value={squares[1]} onClick={() => (squares[1] === null && !isWinner) ? handleClick(1) : false}/>
-                    <Square className="" value={squares[2]} onClick={() => (squares[2] === null && !isWinner) ? handleClick(2) : false}/>
+                    {renderSquare(0)}
+                    {renderSquare(1)}
+                    {renderSquare(2)}
                 </div>
                 <div className="board-row">
-                    <Square className="" value={squares[3]} onClick={() => (squares[3] === null && !isWinner) ? handleClick(3) : false}/>
-                    <Square className="" value={squares[4]} onClick={() => (squares[4] === null && !isWinner) ? handleClick(4) : false}/>
-                    <Square className="" value={squares[5]} onClick={() => (squares[5] === null && !isWinner) ? handleClick(5) : false}/>
+                    {renderSquare(3)}
+                    {renderSquare(4)}
+                    {renderSquare(5)}
                 </div>
                 <div className="board-row">
-                    <Square className="" value={squares[6]} onClick={() => (squares[6] === null && !isWinner) ? handleClick(6) : false}/>
-                    <Square className="" value={squares[7]} onClick={() => (squares[7] === null && !isWinner) ? handleClick(7) : false}/>
-                    <Square className="" value={squares[8]} onClick={() => (squares[8] === null && !isWinner) ? handleClick(8) : false}/>
+                    {renderSquare(6)}
+                    {renderSquare(7)}
+                    {renderSquare(8)}
                 </div>
                 <h1 class="status">{isWinner ? `${ !isX ? 'X' : 'O'} Wins` : `Current player: ${isX ? 'X' : 'O'}`}</h1>
                 <button className="restart-button" onClick={handleRestart}>Reset Game</button>
@@ -65,7 +67,7 @@ const winningPatterns = [
 function calculateWinner(squares) {
     const winner = winningPatterns.filter( (i) => {const [a, b, c] = i;
         if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]){
-            return squares[a];
+            return true;
         }else {
             return null
         }
